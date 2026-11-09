@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/mochi-co/mqtt/v2"
@@ -155,7 +156,7 @@ func (h *NatsAuthHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) boo
 		return false
 	}
 
-	if username == "oktopusController" {
+	if username == controllerUsername() {
 		return true
 	}
 
@@ -197,4 +198,11 @@ func endpointBelongsTo(endpointID string, username string) bool {
 	}
 	last := prefix[len(prefix)-1]
 	return last < '0' || last > '9'
+}
+
+func controllerUsername() string {
+	if id := os.Getenv("CONTROLLER_ID"); id != "" {
+		return id
+	}
+	return "oktopusController"
 }

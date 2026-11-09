@@ -1,6 +1,8 @@
 package usp_utils
 
 import (
+	"os"
+
 	"github.com/google/uuid"
 	"github.com/leandrofars/oktopus/internal/usp/usp_msg"
 	"github.com/leandrofars/oktopus/internal/usp/usp_record"
@@ -8,11 +10,18 @@ import (
 
 const VERSION = "1.0"
 
+func controllerID() string {
+	if id := os.Getenv("CONTROLLER_ID"); id != "" {
+		return id
+	}
+	return "oktopusController"
+}
+
 func NewUspRecord(p []byte, toId string) usp_record.Record {
 	return usp_record.Record{
 		Version:         VERSION,
 		ToId:            toId,
-		FromId:          "oktopusController",
+		FromId:          controllerID(),
 		PayloadSecurity: usp_record.Record_PLAINTEXT,
 		RecordType: &usp_record.Record_NoSessionContext{
 			NoSessionContext: &usp_record.NoSessionContextRecord{
