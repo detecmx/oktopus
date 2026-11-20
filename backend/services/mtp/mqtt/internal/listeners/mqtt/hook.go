@@ -173,9 +173,11 @@ func (h *NatsAuthHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) boo
 
 	controllerTopic := "oktopus/usp/v1/controller/" + endpointID
 	apiTopic := "oktopus/usp/v1/api/" + endpointID
+	telemetryTopic := "telemetria/" + username
 	return topic == "oktopus/usp/v1/controller" ||
 		topic == controllerTopic || strings.HasPrefix(topic, controllerTopic+"/") ||
-		topic == apiTopic || strings.HasPrefix(topic, apiTopic+"/")
+		topic == apiTopic || strings.HasPrefix(topic, apiTopic+"/") ||
+		topic == telemetryTopic
 }
 
 func clientEndpointID(cl *mqtt.Client) string {
